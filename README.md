@@ -2,7 +2,7 @@
 flask app that exposes API which takes the name of a character as input and returns its information
 
 ### endpoints
-`/` html template returns data in text form
+`/` html template returns data in text form <br />
 `/api` json return type 
 
 ### Post request
