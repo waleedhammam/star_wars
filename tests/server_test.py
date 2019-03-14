@@ -19,6 +19,7 @@ class TestServerApi(unittest.TestCase):
 			json.loads(response.get_data().decode(sys.getdefaultencoding()))['0']['gender'], 
 			'male')
 
+	
 
 if __name__ == "__main__":
 	unittest.main()

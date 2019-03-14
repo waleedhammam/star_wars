@@ -3,54 +3,56 @@
 	
 <head>
 	<title>Star Wars</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/table.css') }}">
 </head>
 <body>
-	<center>
-		<div>
-			<form method="POST">
-				<input name="name">
-				<input type="submit">
-			</form>
-		</div>
-	
-		<div>
-			<p>
-				<h4>-- Results --</h4><br/>
-				{% if data %}
-					{% for key, value in data.items() %}
-					<h5>--{{key + 1}}--</h5>											
-						{% for k, item in value.items() %}
-							<ul>
-								{% if k == "full_name" %}
-									<li><h4>Full Name  : {{item}}</h4></li>
-								{% endif %}
-								{% if k == "gender" %}
-									<li><h4>Gender     : {{item}}</h4></li>
-								{% endif %}
-								{% if k == "species" %}
-									<li><h4>Species    : {{item}}</h4></li>
-								{% endif %}
-								{% if k == "lifespan" %}
-									<li><h4>Lifespan   : {{item}}</h4></li>
-								{% endif %}
-								{% if k == "home_planet" %}
-									<li><h4>Homeplanet : {{item}}</h4></li>
-								{% endif %}
-								{% if k == "movies_list" %}
-									<li><h4>Movies List:</h4>
-										<ul>
-											{% for movie in item %}
-												  <h4><li>{{movie}}</li></h4> 
-											{% endfor %}
-										</ul>
-									</li>
-								{% endif %}
-							</ul>
-						{% endfor %}
-					{% endfor %}
-				{% endif %}
-			</p>
-		</div>
-	</center>
+	<div>
+		<h1>Star Wars</h1>
+		<h3>Search for your favourite character</h3>
+	</div>
+	<div>
+		<form method="POST" class="form-wrapper">
+			<input type="text" name="name" id="search" placeholder="Search for..." required>
+			<input type="submit" value="go" id="submit">
+		</form>
+	</div>
+	<div>
+		<h4>-- Results --</h4><br/>
+		{% if data %}
+			{% for obj in data %}
+				<h5>--{{obj + 1}}--</h5>
+				<table>											
+					<tr>
+						<th><h4>Full Name</h4></th>
+						<td><h4>{{ data[obj].full_name }}</h4></td>
+					</tr>
+					<tr>
+						<th><h4>Gender</h4></th>
+						<td><h4>{{ data[obj].gender }}</h4></td>
+					</tr>
+					<tr>
+						<th><h4>Species</h4></th>
+						<td><h4>{{ data[obj].species }}</h4></td>
+					</tr>
+					<tr>
+						<th><h4>Lifespan</h4></th>
+						<td><h4>{{ data[obj].lifespan }}</h4></td>
+					</tr>
+					<tr>
+						<th><h4>Homeplanet</h4></th>
+						<td><h4>{{ data[obj].home_planet }}</h4></td>
+					</tr>
+					<tr>
+						<th rowspan={{ data[obj].movies_list|length+1 }}><h4>Movies List</h4></th>
+							{% for movie in data[obj].movies_list %}
+								<tr><td><h4>{{movie}}</h4></td></tr>
+							{% endfor %}
+					</tr>
+				</table>
+			{% endfor %}
+			<h4>-- End of Results --</h4><br/>
+		{% endif %}
+	</div>
 </body>
 </html>
