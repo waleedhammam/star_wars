@@ -1,0 +1,10 @@
+{
+	"apis":{
+		"base_url":"https://swapi.co/api/",
+		"people_url":"people/"
+	},
+	"host":{
+		"host_ip":"localhost",
+		"host_port":"5001"
+	  }
+}

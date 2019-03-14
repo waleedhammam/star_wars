@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+	
+<head>
+	<title>Star Wars</title>
+</head>
+<body>
+	<center>
+		<div>
+			<form method="POST">
+				<input name="name">
+				<input type="submit">
+			</form>
+		</div>
+	
+		<div>
+			<p>
+				<h4>-- Results --</h4><br/>
+				{% if data %}
+					{% for key, value in data.items() %}
+					<h5>--{{key + 1}}--</h5>											
+						{% for k, item in value.items() %}
+							<ul>
+								{% if k == "full_name" %}
+									<li><h4>Full Name  : {{item}}</h4></li>
+								{% endif %}
+								{% if k == "gender" %}
+									<li><h4>Gender     : {{item}}</h4></li>
+								{% endif %}
+								{% if k == "species" %}
+									<li><h4>Species    : {{item}}</h4></li>
+								{% endif %}
+								{% if k == "lifespan" %}
+									<li><h4>Lifespan   : {{item}}</h4></li>
+								{% endif %}
+								{% if k == "home_planet" %}
+									<li><h4>Homeplanet : {{item}}</h4></li>
+								{% endif %}
+								{% if k == "movies_list" %}
+									<li><h4>Movies List:</h4>
+										<ul>
+											{% for movie in item %}
+												  <h4><li>{{movie}}</li></h4> 
+											{% endfor %}
+										</ul>
+									</li>
+								{% endif %}
+							</ul>
+						{% endfor %}
+					{% endfor %}
+				{% endif %}
+			</p>
+		</div>
+	</center>
+</body>
+</html>
