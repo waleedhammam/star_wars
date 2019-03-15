@@ -1,6 +1,6 @@
-#DOCKERFILE for installing Ubuntu Xenial with the starwars api
+#DOCKERFILE for installing Ubuntu Bionic with the starwars api
 
-FROM ubuntu:xenial
+FROM ubuntu:bionic
 MAINTAINER Waleed Hammam
 
 # updating repos
@@ -15,7 +15,7 @@ RUN apt-get -y install python3-pip
 RUN echo 'installing GIT'
 RUN apt-get -y install git
 
-#clonning the dashboard repo
+#clonning the repo
 RUN echo 'clonning the repo'
 RUN git clone https://github.com/waleedhammam/star_wars.git
 
