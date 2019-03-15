@@ -138,4 +138,4 @@ def get_movie_title_by_url(movie_urls):
 
 
 if __name__ == "__main__":
-	app.run(host=host_ip, port=host_port, threaded=False, debug=True)
+	app.run(host=host_ip, port=host_port)
