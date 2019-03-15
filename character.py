@@ -1,5 +1,3 @@
-import requests
-
 class Character:
 
 	def __init__(self, full_name, gender, species, home_planet, lifespan, movies_list):
