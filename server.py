@@ -1,11 +1,27 @@
-from flask import Flask, request, jsonify, render_template
+'''
+' ## API endpoint returns character data via POST Request
+' 	with payload data of a dictionary with the name of
+' 	the requested character
+' 	data={"name":"--your requested character name--"}
+' 	return result will be a json object with a key of
+' 	character index and value of his data
+' 	could be multiple characters in same request upon the name
+' 
+' ## index_html endpoint returns a html template to deal with
+'	it via html, it renders a template with searchbox
+'''
+
+from flask import Flask, request, json, render_template
 from character import Character
 import requests, json, os, sys
 
-# Flask app
-app = Flask(__name__)
+# starting Flask app
+try:
+	app = Flask(__name__)
+except KeyboardInterrupt:
+	print("^C pressed, Server is shutting down")
 
-# Configurations
+# Loading configurations from config.json file
 CURRENT_ROOT = os.path.abspath(os.path.dirname(__file__))
 config_file_path = os.path.join(CURRENT_ROOT, 'config.json')
 with open(config_file_path) as json_data_file:
@@ -21,21 +37,29 @@ apis_data = config_data['apis']
 api_base_url = apis_data['base_url']
 people_api_url = apis_data['people_url']
 
+# API endpoint
 @app.route('/api', methods=['GET', 'POST'])
 def api():
 	all_data = {}
 	if request.method == 'POST':
 		payload = {'search': request.form['name']}
 		seach_result = search(people_api_url, payload)
-
 		characters_needed_data = optmize_results(seach_result)
+
+		if characters_needed_data == "404":
+			return "404 Not found", 404
 		final_chars = render_linked_results(characters_needed_data)
 
 		for i in range(len(final_chars)):
 			all_data.update({ i : vars(final_chars[i]) })
-			
+
+	response = app.response_class(
+		response=json.dumps(all_data),
+		status=200,
+		mimetype='application/json'
+	)
 	print(json.dumps(all_data, indent=4))
-	return json.dumps(all_data, indent=4)
+	return response
 
 @app.route('/', methods=['GET', 'POST'])
 def index_html():
@@ -43,17 +67,17 @@ def index_html():
 	if request.method == 'POST':
 		payload = {'search': request.form['name']}
 		seach_result = search(people_api_url, payload)
-
 		characters_needed_data = optmize_results(seach_result)
+
+		if characters_needed_data == "404":
+			return "404 Not found", 404
 		final_chars = render_linked_results(characters_needed_data)
 
 		for i in range(len(final_chars)):
 			all_data.update({ i : vars(final_chars[i]) })
-			
-	print(json.dumps(all_data, indent=4))
 	return render_template('index.html', data=all_data)
-	
 
+# Helper functions
 # Search 
 def search(search_key, *args):
 	if search_key == people_api_url:
@@ -62,7 +86,6 @@ def search(search_key, *args):
 		search_request = requests.get(search_key)
 	return search_request.json()
 
-# Helper functions
 # Optmize results accoring to needs, removing unncesccary ones
 def optmize_results(search_data):
 	characters = []
@@ -79,7 +102,7 @@ def optmize_results(search_data):
 			characters.append(Character(name, gender, species, home_planet, lifespan, movies))
 		return characters
 	else:
-		return {}
+		return "404"
 
 # replacing urls with its data
 def render_linked_results(characters):  
